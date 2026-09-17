@@ -1,5 +1,6 @@
 // DATOS DEL COTIZADOR iSHOP
 // Este archivo contiene precios, MSI, Trade In y programas.
+// V51: los selectores de MSI muestran primero el plazo más largo.
 // Puedes actualizar estos datos sin modificar la lógica de app.js.
 
 const MODEL_ORDER = ["Duo","18 Pro Max","18 Pro","17 Pro Max","17 Pro","17","Air","17e","16","15"];
@@ -31,38 +32,38 @@ const AC = {
 };
 
 const EMSI = {
-  "BANAMEX":[3,6,10,12,15],
-  "BBVA":[3,6,12,13],
-  "AMERICAN EXPRESS":[3,6,9,12],
-  "INBURSA":[3,6,12],
-  "SANTANDER":[3,6,9,12],
-  "HSBC":[3,6,9,12,15],
-  "SCOTIABANK":[3,6,9,12,15,18],
-  "BANORTE":[3,6,9,10,12,15],
-  "INVEX":[3,6,9,12,15],
-  "RAPPI CARD":[3,6,9,12],
-  "PLATA CARD":[3,6,9,12],
-  "DIDI CARD":[6,9,12],
-  "MERCADO PAGO":[3,6,9,12],
-  "STORI CARD":[3,6,9,12],
-  "MIFEL":[3,6,12]
+  "BANAMEX":[15,12,10,6,3],
+  "BBVA":[13,12,6,3],
+  "AMERICAN EXPRESS":[12,9,6,3],
+  "INBURSA":[12,6,3],
+  "SANTANDER":[12,9,6,3],
+  "HSBC":[15,12,9,6,3],
+  "SCOTIABANK":[18,15,12,9,6,3],
+  "BANORTE":[15,12,10,9,6,3],
+  "INVEX":[15,12,9,6,3],
+  "RAPPI CARD":[12,9,6,3],
+  "PLATA CARD":[12,9,6,3],
+  "DIDI CARD":[12,9,6],
+  "MERCADO PAGO":[12,9,6,3],
+  "STORI CARD":[12,9,6,3],
+  "MIFEL":[12,6,3]
 };
 
 const ACMSI = {
-  "BANAMEX":[3,6,10],
-  "BBVA":[3,6,12,13],
-  "AMERICAN EXPRESS":[3,6,9,12],
-  "INBURSA":[3,6,12],
-  "SANTANDER":[3,6,9,12],
-  "HSBC":[3,6,9,12],
-  "SCOTIABANK":[3,6,9,12],
-  "BANORTE":[3,6,9,10,12],
-  "INVEX":[3,6,9,12],
-  "RAPPI CARD":[3,6,9,12],
-  "PLATA CARD":[3,6,9,12],
-  "DIDI CARD":[6,9,12],
-  "MERCADO PAGO":[3,6,9,12],
-  "STORI CARD":[3,6,9,12]
+  "BANAMEX":[10,6,3],
+  "BBVA":[13,12,6,3],
+  "AMERICAN EXPRESS":[12,9,6,3],
+  "INBURSA":[12,6,3],
+  "SANTANDER":[12,9,6,3],
+  "HSBC":[12,9,6,3],
+  "SCOTIABANK":[12,9,6,3],
+  "BANORTE":[12,10,9,6,3],
+  "INVEX":[12,9,6,3],
+  "RAPPI CARD":[12,9,6,3],
+  "PLATA CARD":[12,9,6,3],
+  "DIDI CARD":[12,9,6],
+  "MERCADO PAGO":[12,9,6,3],
+  "STORI CARD":[12,9,6,3]
 };
 
 const TRADE_IN = {
