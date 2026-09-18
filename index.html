@@ -62,18 +62,21 @@
 
 
   .quote-modal{position:fixed;inset:0;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;padding:18px;z-index:999}.quote-modal[hidden]{display:none}.quote-modal-card{background:#fff;border-radius:20px;max-width:760px;width:100%;max-height:92vh;overflow:auto;padding:20px}.quote-modal-head{display:flex;justify-content:space-between;align-items:center;font-size:22px;margin-bottom:12px}.quote-modal-head button{width:36px;height:36px;margin:0;background:#eee;color:#111;font-size:24px}.quote-meta{font-size:13px;color:#4b5563;margin-bottom:14px}.quote-modal .result{border-radius:16px}.quote-modal #printQuote{margin-top:14px}
+
+  .quote-footer{margin-top:16px;padding-top:14px;border-top:1px solid #374151;display:flex;justify-content:flex-end;gap:28px;flex-wrap:wrap;color:#fff}.quote-footer>div{display:flex;flex-direction:column;align-items:flex-end;gap:2px}.quote-footer span{font-size:12px;color:#9ca3af}.quote-footer strong{font-size:14px;color:#fff}
+  @media(max-width:700px){.quote-footer{justify-content:space-between;gap:14px}.quote-footer>div{align-items:flex-start}}
+
+  .advisor-inline{display:flex;align-items:center;gap:10px;margin:-10px 0 18px}.advisor-inline label{font-size:13px;font-weight:700;color:#374151}.advisor-inline input{height:38px;max-width:300px;width:100%;border:1px solid #c8d0da;border-radius:10px;background:#fff;padding:0 11px;font-size:14px;color:#111827}
+  @media(max-width:700px){.advisor-inline{align-items:flex-start;flex-direction:column;gap:5px}}
 </style>
 </head>
 <body>
 <main>
   <h1>Cotizador</h1>
   <div class="muted">Tu herramienta de ventas · iPhone · Septiembre 2026</div>
+  <div class="advisor-inline"><label for="advisorName">Nombre del asesor</label><input id="advisorName" type="text" autocomplete="name" placeholder="Escribe tu nombre"></div>
 
-  <section class="card advisor-card">
-    <label class="title" for="advisorName">Nombre del asesor</label>
-    <input id="advisorName" type="text" autocomplete="name" placeholder="Escribe tu nombre">
-    <div class="available">Última actualización: <span id="updateDate">17 de septiembre de 2026</span></div>
-  </section>
+
 
   <section class="card">
     <h2 class="section-title"><span class="emoji">📱</span>Equipo</h2>
@@ -162,8 +165,7 @@
   </section>
 
   <section class="result">
-    <h2 class="section-title"><span class="emoji">🧾</span>Resumen</h2>
-    <div class="advisor-summary" id="advisorSummary">Asesor: —</div>
+    <h2 class="section-title"><span class="emoji">🍎</span>Cotización iShop</h2>
     <div id="summaryRows"></div>
     <div class="monthly">
       <div class="monthly-item">
@@ -190,19 +192,14 @@
         <div class="compare-grid compare-program-grid" id="programComparisonGrid"></div>
       </div>
     </details>
+    <div class="quote-footer">
+      <div><span>Asesor</span><strong id="advisorSummary">—</strong></div>
+      <div><span>Fecha de cotización</span><strong id="quoteDateSummary">17 de septiembre de 2026</strong></div>
+    </div>
   </section>
 
-  <button id="generateQuote">Generar cotización</button>
   <button id="reset" class="secondary-button">Nuevo cálculo</button>
 </main>
-<div id="quoteModal" class="quote-modal" hidden>
-  <div class="quote-modal-card">
-    <div class="quote-modal-head"><strong>Cotización</strong><button id="closeQuote" type="button">×</button></div>
-    <div class="quote-meta"><div><b>Asesor:</b> <span id="quoteAdvisor">—</span></div><div>Precios y valores de Trade In actualizados al <span id="quoteDate">17 de septiembre de 2026</span>.</div></div>
-    <div id="quoteContent"></div>
-    <button id="printQuote" type="button">Imprimir / Guardar PDF</button>
-  </div>
-</div>
 <script src="datos.js"></script>
 <script src="app.js"></script>
 </body>

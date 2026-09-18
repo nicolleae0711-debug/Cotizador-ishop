@@ -317,7 +317,8 @@ function update(){
   $("outLast").textContent=(last && (prog==="ifl" || prog==="get")) ? "Último pago del programa: "+money(last) : "";
 
   const advisor = ($("advisorName")?.value || "").trim();
-  if($("advisorSummary")) $("advisorSummary").textContent = "Asesor: " + (advisor || "—");
+  if($("advisorSummary")) $("advisorSummary").textContent = advisor || "—";
+  if($("quoteDateSummary")) $("quoteDateSummary").textContent = $("updateDate")?.textContent || "17 de septiembre de 2026";
 
   updateComparisonVisibility();
   if(prog!=="cash") renderComparison();
