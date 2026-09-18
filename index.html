@@ -6,182 +6,203 @@
 <title>Cotizador iShop</title>
 <style>
   *{box-sizing:border-box}
-  body{margin:0;background:#f3f4f6;color:#111;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
-  main{max-width:780px;margin:0 auto;padding:20px 14px 44px}
-  h1{margin:0;font-size:28px}
-  .muted{color:#666;margin:5px 0 20px}
-  .card{background:#fff;border-radius:18px;padding:18px;margin-bottom:14px;box-shadow:0 2px 12px rgba(0,0,0,.07)}
-  h2{font-size:18px;margin:0 0 14px}
-  .title{display:block;font-size:14px;font-weight:700;margin:12px 0 6px}
-  select{width:100%;height:44px;border:1px solid #ccc;border-radius:11px;background:#fff;padding:0 11px;font-size:16px}
-  .care-options{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  .care-check{display:flex;align-items:center;gap:8px;border:1px solid #ccc;border-radius:11px;padding:10px;font-weight:700}
+  body{margin:0;background:#f4f6f8;color:#111827;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+  main{max-width:980px;margin:0 auto;padding:28px 20px 46px}
+  h1{margin:0;font-size:42px;line-height:1.05;letter-spacing:-1.5px}
+  .muted{color:#6b7280;margin:7px 0 24px;font-size:18px}
+  .card{background:#fff;border:1px solid #dbe1e8;border-radius:20px;padding:20px 22px;margin-bottom:14px;box-shadow:0 2px 12px rgba(15,23,42,.05)}
+  h2{font-size:25px;line-height:1.1;margin:0 0 16px;font-weight:800;letter-spacing:-.4px}
+  .section-title{display:flex;align-items:center;gap:11px}
+  .emoji{font-size:27px;line-height:1}
+  .title{display:block;font-size:15px;font-weight:700;margin:11px 0 6px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  select{width:100%;height:48px;border:1px solid #c8d0da;border-radius:11px;background:#fff;padding:0 13px;font-size:16px;color:#4b5563}
+  input[type=number]{width:100%;height:48px;border:1px solid #c8d0da;border-radius:11px;background:#fff;padding:0 13px;font-size:16px}
+  .care-strip{margin-top:15px;background:#f1f5f9;border-radius:14px;padding:12px 14px}
+  .care-strip-title{font-size:18px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .care-options{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .care-check{display:flex;align-items:center;gap:9px;font-size:16px}
   .care-check input{width:20px;height:20px;margin:0}
-  .care-check:has(input:checked){background:#f3f3f3;border-color:#111}
-  .check{display:flex;align-items:center;gap:9px;margin-top:13px;font-weight:700}
-  .check input{width:20px;height:20px}
-  #tradeValueBox{margin-top:10px}
-  .included-note,.note{font-size:12px;color:#666;margin-top:7px}
-  .programs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+  .care-check:has(input:checked){font-weight:700}
+  .included-note,.note{font-size:13px;color:#6b7280;margin-top:7px}
+  .programs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:14px}
   .program input{display:none}
-  .program span{display:flex;align-items:center;justify-content:center;min-height:42px;border:1px solid #ccc;border-radius:10px;text-align:center;padding:6px 3px;font-weight:700;font-size:11px;line-height:1.05}
-  .program input:checked+span{background:#111;color:#fff;border-color:#111}
+  .program span{display:flex;align-items:center;justify-content:center;height:44px;border:1px solid #c8d0da;border-radius:10px;text-align:center;padding:3px 5px;font-weight:600;font-size:14px;line-height:1.05;background:#fff;white-space:nowrap}
+  .program input:checked+span{background:#111827;color:#fff;border-color:#111827}
   .program.off span{opacity:.4;background:#eee}
-  .special{background:#eef3ff;border-radius:12px;padding:12px;margin-top:10px;line-height:1.45}
-  .result{background:#111;color:#fff;border-radius:18px;padding:18px}
-  .line{display:grid;grid-template-columns:1fr auto;align-items:center;gap:16px;padding:6px 0;color:#ddd}.line span{min-width:0;text-align:left}.line>b{margin-left:0;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
-  .line span strong{color:#fff}.line>b:empty{display:block;min-width:0}
-  .total{border-top:1px solid #444;margin-top:8px;padding-top:12px;font-size:21px}
-  .monthly{background:#242424;border-radius:14px;padding:13px;margin-top:14px}
-  .big{font-size:25px;font-weight:800;margin:3px 0 12px}
-  .last{font-size:13px;color:#ddd}
-  .compare{margin-top:16px;background:#f6f6f6;border-radius:14px;padding:13px;color:#111}
-  .compare>summary{cursor:pointer;font-size:16px;font-weight:800;color:#111;list-style:none}
-  .compare>summary::-webkit-details-marker{display:none}
-  .compare>summary:after{content:"＋";float:right;font-size:19px}
-  .compare[open]>summary:after{content:"−"}
-  .comparison-content{margin-top:11px}
-  .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-  .compare-item{background:#fff;border:1px solid #ddd;border-radius:12px;padding:11px;color:#111}
-  .compare-item .name{font-weight:800;margin-bottom:5px;color:#111}
-  .compare-item .amount{font-size:19px;font-weight:800;color:#111}
-  .compare-item .small{font-size:12px;color:#666;margin-top:4px;line-height:1.35}
-  .program-toggle{margin-top:10px;color:#111}
-  .program-toggle summary{cursor:pointer;font-weight:700;font-size:13px;list-style:none}
-  .program-toggle summary::-webkit-details-marker{display:none}
-  .program-toggle summary:after{content:"＋";float:right;font-size:17px}
-  .program-toggle[open] summary:after{content:"−"}
-  .compare-program-grid{margin-top:10px}
-  button{width:100%;height:46px;border:0;border-radius:12px;background:#111;color:#fff;font-size:16px;font-weight:700;margin-top:14px}
-  @media(max-width:520px){
-    .care-options{grid-template-columns:1fr}
-    .programs{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
-    .program span{font-size:10px;padding:5px 2px}
-    .compare-grid{grid-template-columns:1fr}
-  }
+  .payment-panel{background:#f1f3f5;border-radius:14px;padding:13px 14px}
+  .available{font-size:13px;color:#374151;margin-top:7px}
+  .special{background:#f1f3f5;border-radius:14px;padding:13px;margin-top:10px;line-height:1.45}
+  .check{display:flex;align-items:center;gap:9px;font-weight:700}
+  .check input{width:20px;height:20px}
+  #tradeValueBox{margin-top:11px}
+  .trade-value{border:1px solid #9ca3af;background:#f5f5f5;border-radius:11px;padding:10px 13px;font-size:21px;font-weight:800}
+  .result{background:#000;color:#fff;border:1px solid #dbe1e8;border-radius:20px;padding:20px 22px;box-shadow:0 2px 12px rgba(15,23,42,.05)}
+  .result-head{display:flex;align-items:center;gap:10px}
+  .line{display:grid;grid-template-columns:1fr auto;align-items:center;gap:16px;padding:6px 0;color:#fff}.line span{min-width:0;text-align:left;color:#fff}.line>b{margin-left:0;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums;color:#fff !important}.line span strong{color:#fff}.total{border-top:1px solid #4b5563;margin-top:8px;padding-top:12px;font-size:21px;color:#fff}.total b,.total span{color:#fff !important}
+  .monthly{background:#000;border-radius:14px;padding:12px;margin-top:14px;display:grid;grid-template-columns:1fr 1fr 1.15fr;gap:0;align-items:stretch;overflow:hidden}
+  .monthly-item{padding:8px 16px;display:flex;flex-direction:column;justify-content:center;min-width:0}
+  .monthly-item + .monthly-item{border-left:1px solid #4b5563}
+  .monthly-item.combined{background:#3f444a;border:1px solid #6b7280;border-radius:12px;margin:0 0 0 10px;padding:12px 18px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+  .monthly-label{font-size:17px;line-height:1.25;color:#fff}
+  .monthly-sub{font-size:14px;line-height:1.3;color:#cbd5e1;margin-top:3px;min-height:1.3em}
+  .big{font-size:27px;font-weight:800;margin:4px 0 0;color:#fff;white-space:nowrap}
+  .monthly-item.combined .monthly-label{font-weight:800}
+  .monthly-item.combined .big{font-size:31px;color:#fff}
+  .last{font-size:13px;color:#d1d5db;grid-column:auto;margin:10px 0 0;padding-top:10px;border-top:1px solid #6b7280}
+  @media(max-width:700px){.monthly{grid-template-columns:1fr;gap:0}.monthly-item + .monthly-item{border-left:0;border-top:1px solid #d7dde5}.monthly-item.combined{margin:8px 0 0}.last{grid-column:auto}}
+  .compare{margin-top:16px;background:#000;border:1px solid #374151;border-radius:14px;padding:13px;color:#fff}
+  .compare>summary{cursor:pointer;font-size:16px;font-weight:800;color:#fff;list-style:none}.compare>summary::-webkit-details-marker{display:none}.compare>summary:after{content:"＋";float:right;font-size:19px}.compare[open]>summary:after{content:"−"}
+  .comparison-content{margin-top:11px}.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.compare-item{background:#1f2328;border:1px solid #4b5563;border-radius:12px;padding:11px;color:#fff}.compare-item .name{font-weight:800;margin-bottom:5px;color:#fff}.compare-item .amount{font-size:19px;font-weight:800;color:#fff}.compare-item .small{font-size:12px;color:#cbd5e1;margin-top:4px;line-height:1.35}
+  .program-toggle{margin-top:10px;color:#111}.program-toggle summary{cursor:pointer;font-weight:700;font-size:13px;list-style:none}.program-toggle summary::-webkit-details-marker{display:none}.program-toggle summary:after{content:"＋";float:right;font-size:17px}.program-toggle[open] summary:after{content:"−"}.compare-program-heading{font-size:15px;font-weight:800;color:#fff;margin-top:16px;margin-bottom:9px}.compare-program-grid{margin-top:0}
+  button{width:100%;height:46px;border:0;border-radius:12px;background:#111827;color:#fff;font-size:16px;font-weight:700;margin-top:14px}
+  @media(max-width:700px){main{padding:20px 14px 40px}h1{font-size:34px}.grid2{grid-template-columns:1fr;gap:5px}.care-options{grid-template-columns:1fr}.programs{gap:4px}.program span{font-size:11px;padding:3px 2px}.compare-grid{grid-template-columns:1fr}.card,.result{padding:17px}}
+  .advisor-card{padding-top:16px;padding-bottom:16px}.advisor-card input{width:100%;height:44px;border:1px solid #c8d0da;border-radius:11px;background:#fff;padding:0 13px;font-size:16px;color:#111827}.advisor-summary{font-size:14px;color:#d1d5db;margin:-6px 0 10px}.secondary-button{background:#6b7280;margin-top:8px}
+  @media print{body{background:#fff}.advisor-card,main>button{display:none!important}.card:not(.result){display:none!important}main{max-width:none;padding:0}.result{box-shadow:none;border:0;border-radius:0;min-height:100vh}.compare{display:none!important}}
+
+
+  .quote-modal{position:fixed;inset:0;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;padding:18px;z-index:999}.quote-modal[hidden]{display:none}.quote-modal-card{background:#fff;border-radius:20px;max-width:760px;width:100%;max-height:92vh;overflow:auto;padding:20px}.quote-modal-head{display:flex;justify-content:space-between;align-items:center;font-size:22px;margin-bottom:12px}.quote-modal-head button{width:36px;height:36px;margin:0;background:#eee;color:#111;font-size:24px}.quote-meta{font-size:13px;color:#4b5563;margin-bottom:14px}.quote-modal .result{border-radius:16px}.quote-modal #printQuote{margin-top:14px}
 </style>
 </head>
 <body>
 <main>
-  <h1>📱 Cotizador iShop</h1>
-  <div class="muted">Precios iPhone · Septiembre 2026</div>
+  <h1>Cotizador</h1>
+  <div class="muted">Tu herramienta de ventas · iPhone · Septiembre 2026</div>
 
-  <section class="card">
-    <h2>Equipo</h2>
-
-    <label class="title">Modelo</label>
-    <select id="model"></select>
-
-    <label class="title">Capacidad</label>
-    <select id="capacity"></select>
-
-    <label class="title">AppleCare+</label>
-    <div class="care-options">
-      <label class="care-check">
-        <input type="checkbox" id="careAcc">
-        <span>AppleCare+</span>
-      </label>
-      <label class="care-check">
-        <input type="checkbox" id="careLoss">
-        <span>AppleCare+ Robo &amp; Pérdida</span>
-      </label>
-    </div>
-
-    <label class="check">
-      <input type="checkbox" id="switchup">
-      <span>Switch Up! — $399</span>
-    </label>
-    <div class="included-note" id="switchNote">Al seleccionar Switch Up!, se incluye AppleCare+ y se abre su configuración.</div>
-  </section>
-
-
-  <section class="card">
-    <h2>Trade In</h2>
-    <label class="check">
-      <input type="checkbox" id="tradeInEnabled">
-      <span>Dejar equipo a cuenta</span>
-    </label>
-
-    <div id="tradeInFields" hidden>
-      <label class="title">Equipo a cuenta</label>
-      <select id="tradeModel"></select>
-
-      <label class="title">Capacidad</label>
-      <select id="tradeCapacity"></select>
-
-      <div class="special" id="tradeValueBox"></div>
-    </div>
-  </section>
-
-  <section class="card" id="careCard" hidden>
-    <h2>AppleCare+</h2>
-
-    <label class="title">Forma de pago</label>
-    <select id="careBank"></select>
-
-    <div id="careTermWrap">
-      <label class="title">MSI de AppleCare+</label>
-      <select id="careTerm"></select>
-    </div>
-
-    <div class="note" id="careNote"></div>
+  <section class="card advisor-card">
+    <label class="title" for="advisorName">Nombre del asesor</label>
+    <input id="advisorName" type="text" autocomplete="name" placeholder="Escribe tu nombre">
+    <div class="available">Última actualización: <span id="updateDate">17 de septiembre de 2026</span></div>
   </section>
 
   <section class="card">
-    <h2>Pago del Equipo</h2>
+    <h2 class="section-title"><span class="emoji">📱</span>Equipo</h2>
+    <div class="grid2">
+      <div>
+        <label class="title">Modelo</label>
+        <select id="model"></select>
+      </div>
+      <div>
+        <label class="title">Capacidad</label>
+        <select id="capacity"></select>
+      </div>
+    </div>
+    <div class="care-strip">
+      <div class="care-strip-title">🚑 AppleCare+</div>
+      <div class="care-options">
+        <label class="care-check"><input type="checkbox" id="careAcc"><span>Daños Accidentales</span></label>
+        <label class="care-check"><input type="checkbox" id="careLoss"><span>Robo &amp; Pérdida</span></label>
+      </div>
+      <div class="included-note" id="switchNote">Switch Up! es una modalidad de compra independiente. Al seleccionarla, se incluye AppleCare+ por daño accidental.</div>
+    </div>
+  </section>
 
+  <section class="card">
+    <h2 class="section-title"><span class="emoji">💳</span>Pago del equipo</h2>
     <div class="programs">
-      <label class="program"><input type="radio" name="program" value="cash"><span>Contado</span></label>
-      <label class="program"><input type="radio" name="program" value="msi" checked><span>MSI normales</span></label>
+      <label class="program"><input type="radio" name="program" value="cash" checked><span>Contado</span></label>
+      <label class="program"><input type="radio" name="program" value="msi"><span>MSI</span></label>
+      <label class="program"><input type="radio" name="program" value="switch"><span>Switch Up!</span></label>
       <label class="program"><input type="radio" name="program" value="ifl"><span>iPhone for Life</span></label>
       <label class="program"><input type="radio" name="program" value="get"><span>GET</span></label>
     </div>
 
-    <div id="normal">
-      <label class="title">Banco / tarjeta</label>
-      <select id="bank"></select>
-      <label class="title">MSI del equipo</label>
-      <select id="term"></select>
-      <div class="note" id="bankNote"></div>
-      <div class="note">24 MSI Banamex y 20 MSI BBVA son exclusivos de sus programas.</div>
+    <div id="normal" class="payment-panel" hidden>
+      <div class="grid2">
+        <div>
+          <label class="title">Banco / Tarjeta</label>
+          <select id="bank"></select>
+          <div class="available" id="bankNote"></div>
+        </div>
+        <div>
+          <label class="title">MSI del equipo</label>
+          <select id="term"></select>
+        </div>
+      </div>
+      <div id="downPaymentWrap">
+        <label class="title">Pago inicial</label>
+        <input id="downPayment" type="number" min="0" step="1" value="0" inputmode="decimal" placeholder="$0">
+        <div class="note">Esta cantidad se paga de contado y el resto se financia.</div>
+      </div>
     </div>
-
     <div id="special" class="special" hidden></div>
   </section>
 
-  <section class="result">
-    <h2>Resumen</h2>
-    <div id="summaryRows"></div>
-
-    <div class="monthly">
-      <div id="equipMonthlyLabel">Mensualidad del equipo</div>
-      <div class="big" id="outEquipMonthly">$0</div>
-
-      <div id="careMonthlyLabel">Mensualidad AppleCare+</div>
-      <div class="big" id="outCareMonthly">$0</div>
-
-      <div>Mensualidad combinada</div>
-      <div class="big" id="outCombined">$0</div>
-
-      <div class="last" id="outLast"></div>
+  <section class="card" id="careCard" hidden>
+    <h2 class="section-title"><span class="emoji">🍎</span>AppleCare+</h2>
+    <div class="grid2">
+      <div>
+        <label class="title">Banco / Tarjeta</label>
+        <select id="careBank"></select>
+        <div class="available" id="careNote"></div>
+      </div>
+      <div id="careTermWrap">
+        <label class="title">MSI de AppleCare+</label>
+        <select id="careTerm"></select>
+      </div>
     </div>
+  </section>
 
+  <section class="card">
+    <h2 class="section-title"><span class="emoji">📱➡️</span>Trade in</h2>
+    <label class="check"><input type="checkbox" id="tradeInEnabled"><span>Dejar equipo a cuenta</span></label>
+    <div id="tradeInFields" hidden>
+      <div class="grid2">
+        <div>
+          <label class="title">Equipo a cuenta</label>
+          <select id="tradeModel"></select>
+        </div>
+        <div>
+          <label class="title">Capacidad</label>
+          <select id="tradeCapacity"></select>
+        </div>
+      </div>
+      <div id="tradeValueBox"></div>
+    </div>
+  </section>
+
+  <section class="result">
+    <h2 class="section-title"><span class="emoji">🧾</span>Resumen</h2>
+    <div class="advisor-summary" id="advisorSummary">Asesor: —</div>
+    <div id="summaryRows"></div>
+    <div class="monthly">
+      <div class="monthly-item">
+        <div class="monthly-label">Mensualidad del equipo</div>
+        <div class="monthly-sub" id="equipMonthlyLabel">Contado</div>
+        <div class="big" id="outEquipMonthly">$0</div>
+      </div>
+      <div class="monthly-item">
+        <div class="monthly-label">Mensualidad AppleCare+</div>
+        <div class="monthly-sub" id="careMonthlyLabel">Contado</div>
+        <div class="big" id="outCareMonthly">$0</div>
+      </div>
+      <div class="monthly-item combined">
+        <div class="monthly-label">Mensualidad combinada</div>
+        <div class="big" id="outCombined">$0</div>
+        <div class="last" id="outLast"></div>
+      </div>
+    </div>
     <details class="compare" id="comparisonMenu">
       <summary>Comparación de opciones</summary>
       <div class="comparison-content">
         <div class="compare-grid" id="comparisonGrid"></div>
-
-        <details class="program-toggle">
-          <summary>Mostrar opciones iPhone for Life y GET</summary>
-          <div class="compare-grid compare-program-grid" id="programComparisonGrid"></div>
-        </details>
+        <div class="compare-program-heading">iPhone for Life y GET</div>
+        <div class="compare-grid compare-program-grid" id="programComparisonGrid"></div>
       </div>
     </details>
   </section>
 
-  <button id="reset">Nuevo cálculo</button>
+  <button id="generateQuote">Generar cotización</button>
+  <button id="reset" class="secondary-button">Nuevo cálculo</button>
 </main>
-
+<div id="quoteModal" class="quote-modal" hidden>
+  <div class="quote-modal-card">
+    <div class="quote-modal-head"><strong>Cotización</strong><button id="closeQuote" type="button">×</button></div>
+    <div class="quote-meta"><div><b>Asesor:</b> <span id="quoteAdvisor">—</span></div><div>Precios y valores de Trade In actualizados al <span id="quoteDate">17 de septiembre de 2026</span>.</div></div>
+    <div id="quoteContent"></div>
+    <button id="printQuote" type="button">Imprimir / Guardar PDF</button>
+  </div>
+</div>
 <script src="datos.js"></script>
 <script src="app.js"></script>
 </body>

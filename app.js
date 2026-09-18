@@ -29,7 +29,7 @@ function populate(select, values, formatter=x=>x){
 }
 
 function program(){
-  return document.querySelector('input[name="program"]:checked')?.value || "msi";
+  return document.querySelector('input[name="program"]:checked')?.value || "cash";
 }
 
 function careType(){
@@ -73,6 +73,11 @@ function updateTradeValue(){
 }
 
 function init(){
+  // Inicialización segura: todos los elementos del DOM deben existir antes de usarlos.
+  if(!$("model") || typeof P === "undefined" || typeof MODEL_ORDER === "undefined"){
+    document.body.insertAdjacentHTML("afterbegin", '<div style="background:#fff3cd;color:#664d03;padding:12px 16px;margin:12px;border-radius:12px;font:14px -apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif"><b>No se pudieron cargar los datos del cotizador.</b><br>Verifica que <code>datos.js</code> y <code>app.js</code> estén en la misma carpeta.</div>');
+    return;
+  }
   populate($("model"), MODEL_ORDER);
   populate($("tradeModel"), Object.keys(TRADE_MODELS));
   tradeModelChange();
@@ -111,7 +116,7 @@ function modelChange(){
 function bankChange(){
   const b=$("bank").value;
   const vals=EMSI[b]||[];
-  populate($("term"), vals, v=>v+" MSI");
+  populate($("term"), [...vals].sort((a,b)=>b-a), v=>v+" MSI");
   $("bankNote").textContent=vals.length
     ? "Plazos disponibles: "+vals.join(", ")+" MSI · máximo "+Math.max(...vals)+" MSI"
     : "";
@@ -127,7 +132,7 @@ function careBankChange(){
   }else{
     $("careTermWrap").style.display="block";
     const vals=ACMSI[b]||[];
-    populate($("careTerm"), vals, v=>v+" MSI");
+    populate($("careTerm"), [...vals].sort((a,b)=>b-a), v=>v+" MSI");
     $("careNote").textContent=vals.length
       ? "Plazos disponibles: "+vals.join(", ")+" MSI · máximo "+Math.max(...vals)+" MSI"
       : "";
@@ -138,12 +143,6 @@ function careBankChange(){
 function careChange(){
   const m=$("model").value;
   let ct=careType();
-
-  if($("switchup").checked && ct==="none"){
-    $("careAcc").checked=true;
-    $("careLoss").checked=false;
-    ct="acc";
-  }
 
   const available=ct!=="none" && AC[m] && AC[m][ct]!=null;
   $("careCard").hidden=!available;
@@ -158,17 +157,28 @@ function update(){
   const m=$("model").value;
   const c=$("capacity").value;
   const price=Number(P[m][c]||0);
-  const sw=$("switchup").checked;
+  const sw=program()==="switch";
   const prog=program();
   const tradeCredit=tradeValue();
   const netPrice=Math.max(0, price-tradeCredit);
   const switchAmount=sw?399:0;
-  const financed=netPrice+switchAmount;
+  const initialAllowed=(prog==="msi"||prog==="switch");
+  const requestedInitial=initialAllowed ? Math.max(0, Number($("downPayment").value||0)) : 0;
+  const grossFinanced=netPrice+switchAmount;
+  const downPayment=Math.min(requestedInitial, grossFinanced);
+  const financed=Math.max(0, grossFinanced-downPayment);
 
   let equipMonthly=0,last=0;
 
   if(prog==="cash"){
     equipMonthly=financed;
+  }else if(prog==="switch"){
+    const t=Number($("term").value||0);
+    equipMonthly=t?financed/t:0;
+    const vals=EMSI[$("bank").value]||[];
+    $("bankNote").textContent=vals.length
+      ? "Plazos disponibles: "+vals.join(", ")+" MSI · máximo "+Math.max(...vals)+" MSI"
+      : "";
   }else if(prog==="msi"){
     const t=Number($("term").value||0);
     equipMonthly=t?financed/t:0;
@@ -185,8 +195,12 @@ function update(){
     last=SPECIAL[m][prog][1];
   }
 
-  $("normal").hidden=prog!=="msi";
-  $("special").hidden=!(prog==="ifl"||prog==="get");
+  $("normal").hidden=!(prog==="msi"||prog==="switch");
+  $("special").hidden=!(prog==="ifl"||prog==="get"||prog==="switch");
+  if($("downPaymentWrap")){
+    $("downPaymentWrap").hidden=!(prog==="msi"||prog==="switch");
+    if(prog!=="msi" && prog!=="switch") $("downPayment").value=0;
+  }
 
   if(prog==="cash"){
     $("bankNote").textContent="Pago de contado · sin financiamiento.";
@@ -194,6 +208,8 @@ function update(){
     $("special").innerHTML="<b>iPhone for Life · Banamex · 24 MSI</b><br>Plazo exclusivo del programa.";
   }else if(prog==="get"){
     $("special").innerHTML="<b>GET · BBVA · 20 MSI</b><br>Plazo exclusivo del programa.";
+  }else if(prog==="switch"){
+    $("special").innerHTML="<b>Switch Up! · $399</b><br>Modalidad independiente. Puede financiarse con los MSI disponibles del banco seleccionado.";
   }
 
   const ct=careType();
@@ -213,6 +229,10 @@ function update(){
     rows += '<div class="line"><span><strong>iPhone '+m+'</strong></span><b>'+money(price)+'</b></div>';
     rows += '<div class="line"><span><strong>Trade In · '+$("tradeModel").value+' '+$("tradeCapacity").value+'</strong></span><b>-'+money(tradeCredit)+'</b></div>';
 
+    if((prog==="msi"||prog==="switch") && downPayment>0){
+      rows += '<div class="line"><span><strong>Pago inicial</strong></span><b>-'+money(downPayment)+'</b></div>';
+    }
+
     if(prog==="ifl"){
       const financingAmount = Math.max(0, price-tradeCredit);
       rows += '<div class="line"><span><strong>Equipo financiado · iPhone for Life · Banamex 24 MSI</strong></span><b>'+money(financingAmount)+'</b></div>';
@@ -223,6 +243,8 @@ function update(){
       rows += '<div class="line"><span><strong>Cargo demorado</strong></span><b>'+money(last)+'</b></div>';
     }else if(prog==="msi"){
       rows += '<div class="line"><span><strong>Equipo financiado · '+$("term").value+' MSI de '+$("bank").value+'</strong></span><b>'+money(financed)+'</b></div>';
+    }else if(prog==="switch"){
+      rows += '<div class="line"><span><strong>Equipo financiado · Switch Up! · '+$("term").value+' MSI de '+$("bank").value+'</strong></span><b>'+money(financed)+'</b></div>';
     }else{
       rows += '<div class="line"><span><strong>Equipo financiado · Contado</strong></span><b>'+money(financed)+'</b></div>';
     }
@@ -233,10 +255,16 @@ function update(){
       rows += '<div class="line"><span>Switch Up!</span><b>'+money(399)+'</b></div>';
     }
 
+    if((prog==="msi"||prog==="switch") && downPayment>0){
+      rows += '<div class="line"><span>Pago inicial</span><b>-'+money(downPayment)+'</b></div>';
+    }
+
     if(prog==="cash"){
       rows += '<div class="line"><span>Equipo financiado · Contado</span><b>'+money(financed)+'</b></div>';
     }else if(prog==="msi"){
       rows += '<div class="line"><span>Equipo financiado · '+$("term").value+' MSI de '+$("bank").value+'</span><b>'+money(financed)+'</b></div>';
+    }else if(prog==="switch"){
+      rows += '<div class="line"><span>Equipo financiado · Switch Up! · '+$("term").value+' MSI de '+$("bank").value+'</span><b>'+money(financed)+'</b></div>';
     }else if(prog==="ifl"){
       rows += '<div class="line"><span>Equipo financiado · iPhone for Life · Banamex 24 MSI</span><b>'+money(financed)+'</b></div>';
     }else if(prog==="get"){
@@ -245,10 +273,11 @@ function update(){
   }
 
   if(carePrice>0){
+    const careTypeLabel = $("careLoss").checked ? 'AppleCare+ · R&P' : 'AppleCare+';
     if(careBank==="CONTADO"){
-      rows += '<div class="line"><span>AppleCare+ · Contado</span><b>'+money(carePrice)+'</b></div>';
+      rows += '<div class="line"><span>'+careTypeLabel+' · Contado</span><b>'+money(carePrice)+'</b></div>';
     }else{
-      rows += '<div class="line"><span>AppleCare+ · '+$("careTerm").value+' MSI de '+careBank+'</span><b>'+money(carePrice)+'</b></div>';
+      rows += '<div class="line"><span>'+careTypeLabel+' · '+$("careTerm").value+' MSI de '+careBank+'</span><b>'+money(carePrice)+'</b></div>';
     }
   }
 
@@ -260,12 +289,17 @@ function update(){
     equipLabel="Mensualidad del equipo · Contado";
   }else if(prog==="msi"){
     equipLabel="Mensualidad del equipo · "+$("term").value+" MSI de "+$("bank").value;
+  }else if(prog==="switch"){
+    equipLabel="Mensualidad del equipo · Switch Up! · "+$("term").value+" MSI de "+$("bank").value;
   }else if(prog==="ifl"){
     equipLabel="Mensualidad del equipo · iPhone for Life · Banamex 24 MSI";
   }else if(prog==="get"){
     equipLabel="Mensualidad del equipo · GET · BBVA 20 MSI";
   }
   $("equipMonthlyLabel").textContent=equipLabel;
+  if(downPayment>0 && (prog==="msi"||prog==="switch")){
+    $("equipMonthlyLabel").textContent += " · Inicial "+money(downPayment);
+  }
 
   let careLabel="Mensualidad AppleCare+";
   if(carePrice>0){
@@ -280,7 +314,10 @@ function update(){
   $("outEquipMonthly").textContent=money(Math.round(equipMonthly));
   $("outCareMonthly").textContent=money(Math.round(careMonthly));
   $("outCombined").textContent=money(Math.round(combined));
-  $("outLast").textContent=last ? "Último pago del programa: "+money(last) : "";
+  $("outLast").textContent=(last && (prog==="ifl" || prog==="get")) ? "Último pago del programa: "+money(last) : "";
+
+  const advisor = ($("advisorName")?.value || "").trim();
+  if($("advisorSummary")) $("advisorSummary").textContent = "Asesor: " + (advisor || "—");
 
   updateComparisonVisibility();
   if(prog!=="cash") renderComparison();
@@ -395,13 +432,10 @@ function resetCalculator(){
   $("model").selectedIndex=0;
   $("careAcc").checked=false;
   $("careLoss").checked=false;
-  $("switchup").checked=false;
   $("tradeInEnabled").checked=false;
   $("tradeModel").selectedIndex=0;
   tradeModelChange();
-  $("switchNote").textContent="Al seleccionar Switch Up!, se incluye AppleCare+.";
-
-  document.querySelectorAll('input[name="program"]').forEach(x=>x.checked=x.value==="msi");
+  document.querySelectorAll('input[name="program"]').forEach(x=>x.checked=x.value==="cash");
 
   $("bank").selectedIndex=0;
   $("careBank").selectedIndex=0;
@@ -441,23 +475,38 @@ $("tradeCapacity").addEventListener("change",()=>{
   update();
 });
 
-$("switchup").addEventListener("change",()=>{
-  if($("switchup").checked){
+$("bank").addEventListener("change",bankChange);
+$("term").addEventListener("change",update);
+$("downPayment").addEventListener("input",update);
+$("careBank").addEventListener("change",careBankChange);
+$("careTerm").addEventListener("change",update);
+document.querySelectorAll('input[name="program"]').forEach(x=>x.addEventListener("change",()=>{
+  if(program()==="switch"){
     $("careAcc").checked=true;
     $("careLoss").checked=false;
-    $("switchNote").textContent="Switch Up! incluye AppleCare+ por daño accidental. Puedes cambiar a Robo y Pérdida si lo deseas.";
-  }else{
-    $("switchNote").textContent="Al seleccionar Switch Up!, se incluye AppleCare+.";
   }
   careChange();
   update();
-});
+}));
+$("advisorName")?.addEventListener("input",update);
 
-$("bank").addEventListener("change",bankChange);
-$("term").addEventListener("change",update);
-$("careBank").addEventListener("change",careBankChange);
-$("careTerm").addEventListener("change",update);
-document.querySelectorAll('input[name="program"]').forEach(x=>x.addEventListener("change",update));
+$("generateQuote")?.addEventListener("click",()=>{
+  const advisor = ($("advisorName")?.value || "").trim();
+  $("quoteAdvisor").textContent = advisor || "—";
+  $("quoteDate").textContent = $("updateDate")?.textContent || "17 de septiembre de 2026";
+  const clone = $("result") ? $("result").cloneNode(true) : document.querySelector(".result")?.cloneNode(true);
+  if(clone){
+    clone.id="generatedResult";
+    clone.querySelectorAll("details").forEach(d=>d.open=false);
+    $("quoteContent").innerHTML="";
+    $("quoteContent").appendChild(clone);
+  }
+  $("quoteModal").hidden=false;
+});
+$("closeQuote")?.addEventListener("click",()=>$("quoteModal").hidden=true);
+$("quoteModal")?.addEventListener("click",e=>{if(e.target.id==="quoteModal") $("quoteModal").hidden=true;});
+$("printQuote")?.addEventListener("click",()=>window.print());
+
 $("reset").addEventListener("click",resetCalculator);
 
-init();
+window.addEventListener("DOMContentLoaded", init);

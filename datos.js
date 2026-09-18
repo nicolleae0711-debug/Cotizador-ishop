@@ -67,8 +67,8 @@ const ACMSI = {
 };
 
 const TRADE_IN = {
-  "IPHONe SE3":{"64":2000,"128":2000,"256":3000},
-  "IPHONE 12 MINI":{"64":3000,"128":4000,"256":4000},
+  "IPHONE SE3":{"64":2000,"128":2000,"256":3000},
+  "IPHONE 12 MINI":{"64":3000,"128":3000,"256":4000},
   "IPHONE 12":{"64":3000,"128":4000,"256":4000},
   "IPHONE 12 PRO":{"128":5000,"256":5000,"512":6000},
   "IPHONE 12 PRO MAX":{"128":5000,"256":6000,"512":7000},
@@ -78,7 +78,7 @@ const TRADE_IN = {
   "IPHONE 13 PRO MAX":{"128":7000,"256":8000,"512":9000,"1TB":10000},
   "IPHONE 14":{"128":6000,"256":7000,"512":8000},
   "IPHONE 14 PLUS":{"128":6000,"256":7000,"512":8000},
-  "IPHONE 14 PRO":{"128":9000,"256":10000,"1TB":11000},
+  "IPHONE 14 PRO":{"128":9000,"256":9000,"512":10000,"1TB":11000},
   "IPHONE 14 PRO MAX":{"128":9000,"256":10000,"512":10000,"1TB":12000},
   "IPHONE 15":{"128":7000,"256":8000,"512":10000},
   "IPHONE 15 PLUS":{"128":8000,"256":10000,"512":12000},
@@ -89,15 +89,18 @@ const TRADE_IN = {
   "IPHONE 16 PLUS":{"128":11000,"256":12000,"512":14000},
   "IPHONE 16 PRO":{"128":11000,"256":12000,"512":13000,"1TB":15000},
   "IPHONE 16 PRO MAX":{"256":13000,"512":15000,"1TB":18000},
-  "IPHONE 17E":{"256GB":11000,"512GB":13000},
+  "IPHONE 17E":{"256":11000,"512":13000},
   "IPHONE 17":{"256":13000,"512":16000},
-  "IPHONE 17 PRO":{"256":16000,"512":18000,"1TB":20000},
+  "IPHONE 17 PRO":{"256":15000,"512":18000,"1TB":20000},
   "IPHONE 17 PRO MAX":{"256":16000,"512":18000,"1TB":20000,"2TB":23000},
-  "IPHONE AIR":{"256":14000,"512":15000,"1TB":17000}
+  "IPHONE AIR":{"256":14000,"512":15000,"1TB":17000},
+  "IPHONE 18 PRO":{"256":23000,"512":26000,"1TB":30000,"2TB":36000},
+  "IPHONE 18 PRO MAX":{"256":25000,"512":28000,"1TB":32000,"2TB":40000},
+  "IPHONE DUO":{"256":40000,"512":43000,"1TB":48000,"2TB":53000}
 };
 
 const TRADE_MODELS={
-    "iPhone Air":1,
+    "iPhone Duo":1,"iPhone 18 Pro Max":1,"iPhone 18 Pro":1,"iPhone Air":1,
     "iPhone 17 Pro Max":1,"iPhone 17 Pro":1,"iPhone 17":1,"iPhone 17e":1,
     "iPhone 16 Pro Max":1,"iPhone 16 Pro":1,"iPhone 16 Plus":1,"iPhone 16":1,"iPhone 16e":1,
     "iPhone 15 Pro Max":1,"iPhone 15 Pro":1,"iPhone 15 Plus":1,"iPhone 15":1,
@@ -108,7 +111,7 @@ const TRADE_MODELS={
   };
 
 const TRADE_MODEL_MAP={
-    "iPhone SE3":"IPHONe SE3",
+    "iPhone SE3":"IPHONE SE3",
     "iPhone 12 mini":"IPHONE 12 MINI",
     "iPhone 12":"IPHONE 12",
     "iPhone 12 Pro":"IPHONE 12 PRO",
@@ -134,7 +137,10 @@ const TRADE_MODEL_MAP={
     "iPhone 17":"IPHONE 17",
     "iPhone 17 Pro":"IPHONE 17 PRO",
     "iPhone 17 Pro Max":"IPHONE 17 PRO MAX",
-    "iPhone Air":"IPHONE AIR"
+    "iPhone Air":"IPHONE AIR",
+    "iPhone 18 Pro":"IPHONE 18 PRO",
+    "iPhone 18 Pro Max":"IPHONE 18 PRO MAX",
+    "iPhone Duo":"IPHONE DUO"
   };
 
 const SPECIAL = {
@@ -147,3 +153,4 @@ const SPECIAL = {
   "17e":{ifl:[499,5023],get:[579,5419]},
   "16":{ifl:[639,3663],get:[739,4219]}
 };
+
