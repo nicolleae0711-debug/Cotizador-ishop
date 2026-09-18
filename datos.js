@@ -3,6 +3,8 @@
 // V51: los selectores de MSI muestran primero el plazo más largo.
 // Puedes actualizar estos datos sin modificar la lógica de app.js.
 
+const LAST_PRICE_UPDATE = "17 de septiembre de 2026";
+
 const MODEL_ORDER = ["Duo","18 Pro Max","18 Pro","17 Pro Max","17 Pro","17","Air","17e","16","15"];
 
 const P = {

@@ -17,6 +17,20 @@
 const $ = id => document.getElementById(id);
 const money = n => Number(n||0).toLocaleString("es-MX",{style:"currency",currency:"MXN",maximumFractionDigits:0});
 
+function formatQuoteDate(d=new Date()){
+  return d.toLocaleDateString("es-MX",{day:"numeric",month:"long",year:"numeric"});
+}
+
+function updateMeta(){
+  if($("priceUpdate") && typeof LAST_PRICE_UPDATE !== "undefined") {
+    $("priceUpdate").textContent = "Última actualización de precios: " + LAST_PRICE_UPDATE;
+  }
+  if($("quoteDateSummary")) {
+    $("quoteDateSummary").textContent = formatQuoteDate(new Date());
+  }
+}
+
+
 
 function populate(select, values, formatter=x=>x){
   select.innerHTML = "";
@@ -318,7 +332,7 @@ function update(){
 
   const advisor = ($("advisorName")?.value || "").trim();
   if($("advisorSummary")) $("advisorSummary").textContent = advisor || "—";
-  if($("quoteDateSummary")) $("quoteDateSummary").textContent = $("updateDate")?.textContent || "17 de septiembre de 2026";
+  if($("quoteDateSummary")) $("quoteDateSummary").textContent = formatQuoteDate(new Date());
 
   updateComparisonVisibility();
   if(prog!=="cash") renderComparison();
@@ -489,6 +503,8 @@ document.querySelectorAll('input[name="program"]').forEach(x=>x.addEventListener
   careChange();
   update();
 }));
+updateMeta();
+
 $("advisorName")?.addEventListener("input",update);
 
 $("generateQuote")?.addEventListener("click",()=>{
